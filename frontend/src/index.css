@@ -1,0 +1,124 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+header {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  background-color: bisque;
+}
+
+.logo {
+  display: flex;
+  width: 100%;
+  align-items: center; 
+  justify-content: center;
+}
+
+.header-buttons-place {
+  display: flex;
+  height: 100%;
+}
+
+.headder-button{
+  display: flex;
+  min-width: 100px;
+  width:fit-content;
+  margin-right: 3px;
+  padding: 10px;
+  background-color: aquamarine;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.headder-name{
+  display: flex;
+  min-width: 100px;
+  width:fit-content;
+  margin-right: 3px;
+  padding: 10px;
+  /* background-color: rgb(210, 244, 232); */
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+
+.headder-button:hover {
+  background-color: rgb(98, 176, 150);
+}
+
+.headder-login-buttons {
+  display: flex;
+  margin-left: auto;
+}
+
+footer {
+  width: 100%;
+  height: 70px;
+  background-color: darkgray;
+}
+
+.board {
+  background-color: rgb(95, 76, 203);
+  display: flex;
+  height: 100vh;
+} 
+
+.group {
+  background-color: rgb(221, 219, 219);
+  min-width: 150px;
+  width: 250px;
+  margin: 5px;
+  height: 100vh;
+}
+.group-header {
+  padding-left: 10px;
+  display: flex;
+  align-items: center;
+  background-color: rgb(215, 188, 248);
+  height: 40px;
+  cursor: pointer;
+}
+
+.item {
+  display: flex;
+  background-color: white;
+  padding: 10px;
+  margin-top: 3px;
+  cursor: grab;
+}
+
+.item-name {
+  color: black;
+}
+
+.item-author {  
+  color: black;
+}
+
+.item-add {
+  display: flex;
+  background-color: white;
+  padding: 10px;
+  margin-top: 3px;
+  opacity: 30%;
+}
+
+.item-add:hover {
+  opacity: 70%;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
