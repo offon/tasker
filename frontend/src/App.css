@@ -1,0 +1,12 @@
+.col-md-2 {
+  /* background-color: rgb(215, 232, 244); */
+  height: 100vh;
+  /* padding: 0; */
+}
+
+@media (min-width: 768px){
+.col-md-2 {
+    flex: 0 0 auto;
+    width: 12%;
+}
+}

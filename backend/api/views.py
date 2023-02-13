@@ -1,18 +1,26 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import decorators, status, viewsets
-from rest_framework.decorators import api_view
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from tasks.models import Group, Task
-from django.shortcuts import get_object_or_404
 
-from .serialisers import (GetUserSerialiser, GroupsCreateSerialiser,
+from .serialisers import (CreateUserSerialiser, GetUserSerialiser,
                           GroupSerialiser, TaskSerialiser)
 from .utils import return_all_data
 
 
-@api_view(['GET'])
-def me(request):
-    serialiser = GetUserSerialiser(request.user)
-    return Response(serialiser.data, status=status.HTTP_200_OK)
+class UsersSet(viewsets.ViewSet):
+    def create(self, request):
+        serialiser = CreateUserSerialiser(data=request.data)
+        if serialiser.is_valid(raise_exception=True):
+            serialiser.save()
+            return Response(serialiser.data, status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['get'])
+    def me(self, request):
+        serialiser = GetUserSerialiser(request.user)
+        return Response(serialiser.data, status=status.HTTP_200_OK)
 
 
 class TasksViewSet(viewsets.ViewSet):

@@ -59,7 +59,7 @@ class Api {
 
   signup ({ email, password, username, first_name, last_name }) {
     return fetch(
-      `/api/users/`,
+      this._url+`/api/users/`,
       {
         method: 'POST',
         headers: this._headers,
@@ -70,7 +70,7 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  getUserData () {
+    getUserData () {
     const token = localStorage.getItem('token')
     return fetch(
       this._url+`/api/users/me/`,
