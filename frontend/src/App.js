@@ -1,19 +1,23 @@
-import { Routes, Route, useNavigate , Redirect, useLocation } from 'react-router-dom'
-import React, { useState, useEffect } from 'react'
+import { Routes, Route, useNavigate, Redirect, useLocation } from 'react-router-dom'
+import React, { useState, useEffect, createState } from 'react'
 import { Header, Footer, ProtectedRoute } from './components'
 import api from './api'
 import styles from './styles.module.css'
 import cn from 'classnames'
 import { AuthContext, UserContext } from './contexts'
-import { SignUp, SignIn } from './pages'
+import { Main, SignUp, SignIn, ChangePassword, CreateTask } from './pages'
 
 
 function App() {
-  const [ loggedIn, setLoggedIn ] = useState(null)
-  const [ user, setUser ] = useState({})
-  const [ menuToggled, setMenuToggled ] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(null)
+  const [user, setUser] = useState({})
+  const [menuToggled, setMenuToggled] = useState(false)
+  const [boards, setBoards] = useState(null);
+  const [current_group, setCurrentGroup] = useState(null)
+  const [current_task, setCurrentTask] = useState(null)
 
   const navigate = useNavigate()
+
 
   const registration = ({
     email,
@@ -57,13 +61,13 @@ function App() {
         setLoggedIn(false)
       }
     })
-    .catch(err => {
-      const errors = Object.values(err)
-      if (errors) {
-        alert(errors.join(', '))
-      }
-      setLoggedIn(false)
-    })
+      .catch(err => {
+        const errors = Object.values(err)
+        if (errors) {
+          alert(errors.join(', '))
+        }
+        setLoggedIn(false)
+      })
   }
 
   const onSignOut = () => {
@@ -81,12 +85,40 @@ function App() {
       })
   }
 
+  const changePassword = ({
+    new_password,
+    current_password
+  }) => {
+    api.changePassword({ new_password, current_password })
+      .then(res => {
+        // history.push('/signin')
+      })
+      .catch(err => {
+        const errors = Object.values(err)
+        if (errors) {
+          alert(errors.join(', '))
+        }
+      })
+  }
+
+  const getGroupsData = () => {
+    api.getGroupsData()
+      .then(res => {
+        setBoards(res)
+      }).catch(err => {
+        const errors = Object.values(err)
+        if (errors) {
+          alert(errors.join(', '))
+        }
+      })
+  }
+
   useEffect(_ => {
     if (loggedIn) {
-      // history.push('/recipes')
+      // navigate('/groups')
     }
   }, [loggedIn])
-  
+
   useEffect(_ => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -94,7 +126,6 @@ function App() {
         .then(res => {
           setUser(res)
           setLoggedIn(true)
-          // getOrders()
         })
         .catch(err => {
           setLoggedIn(false)
@@ -107,35 +138,43 @@ function App() {
   if (loggedIn === null) {
     return <div className={styles.loading}>Загрузка</div>
   }
+
   return <AuthContext.Provider value={loggedIn}>
-  <UserContext.Provider value={user}>
-  {/* <div className={cn("App", {
+    <UserContext.Provider value={user}>
+      <div className={cn("App", {
         [styles.appMenuToggled]: menuToggled
       })}>
-          <div
+        <div
           className={styles.menuButton}
-          onClick={_ => setMenuToggled(!menuToggled)}>
-        </div> */}
-  <Header loggedIn={loggedIn} onSignOut={onSignOut} />
-    {/* <div class="container">
-    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-      <span class="fs-4">TASKER</span>
-      <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      </ul>
-
-      <div class="col-md-3 text-end">
-        <button type="button" class="btn btn-outline-primary me-2">Войти</button>
-        <button type="button" class="btn btn-outline-primary me-2">Зарегистрироваться</button>
+          onClick={_ => setMenuToggled(!menuToggled)}
+        >
+        </div>
+        <Header loggedIn={loggedIn} onSignOut={onSignOut} />
+        <Routes>
+          <Route exact path="/signin" element={<SignIn onSignIn={authorization} />} />
+          <Route exact path="/signup" element={<SignUp onSignUp={registration} />} />
+          <Route exact path="/change-password" element={<ChangePassword onPasswordChange={changePassword} />} />
+          <Route exact path="/groups" element={<ProtectedRoute loggedIn={loggedIn} />}>
+            <Route path="/groups" element={
+              <Main
+                boards={boards}
+                current_group={current_group}
+                current_task={current_task}
+                setBoards={setBoards}
+                getGroupsData={getGroupsData}
+                setCurrentGroup={setCurrentGroup}
+                setCurrentTask={setCurrentTask}
+              />} /></Route>
+          <Route exact path="/create_task" element={<ProtectedRoute loggedIn={loggedIn} />}>
+            <Route path="/create_task" element={
+              <CreateTask
+                boards={boards}
+                current_group={current_group}
+                setBoards={setBoards}
+              />} /></Route>
+        </Routes>
       </div>
-    </header>
-    </div> */}
-
-  <Routes>
-  <Route path="/signup" element={<SignUp onSignUp={registration}/>} />
-  <Route path="/signin" element={<SignIn onSignUp={authorization}/>} />
-  </Routes>
-  {/* </div> */}
-  </UserContext.Provider>
-  </AuthContext.Provider>
+    </UserContext.Provider>
+  </AuthContext.Provider >
 }
 export default App;

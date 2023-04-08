@@ -1,10 +1,10 @@
 class Api {
-  constructor (url, headers) {
+  constructor(url, headers) {
     this._url = url
     this._headers = headers
   }
 
-  checkResponse (res) {
+  checkResponse(res) {
     return new Promise((resolve, reject) => {
       if (res.status === 204) {
         return resolve(res)
@@ -14,24 +14,23 @@ class Api {
     })
   }
 
-  getGroupsData () {
+  getGroupsData() {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
-
     return fetch(
-      this._url+'/api/groups/',
+      this._url + '/api/groups/',
       {
         method: 'GET',
         headers: {
           ...this._headers,
           ...authorization
-        } 
+        }
       }).then(this.checkResponse)
   }
 
-  signin ({ email, password }) {
+  signin({ email, password }) {
     return fetch(
-      this._url+'/api/auth/token/login/',
+      this._url + '/api/users/login/',
       {
         method: 'POST',
         headers: this._headers,
@@ -42,11 +41,11 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  signout () {
+  signout() {
     console.log('Выход')
     const token = localStorage.getItem('token')
     return fetch(
-      this._url+'/api/auth/token/logout/',
+      this._url + '/api/users/logout/',
       {
         method: 'POST',
         headers: {
@@ -57,9 +56,9 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  signup ({ email, password, username, first_name, last_name }) {
+  signup({ email, password, username, first_name, last_name }) {
     return fetch(
-      this._url+`/api/users/`,
+      this._url + `/api/users/`,
       {
         method: 'POST',
         headers: this._headers,
@@ -70,10 +69,10 @@ class Api {
     ).then(this.checkResponse)
   }
 
-    getUserData () {
+  getUserData() {
     const token = localStorage.getItem('token')
     return fetch(
-      this._url+`/api/users/me/`,
+      this._url + `/api/users/me/`,
       {
         method: 'GET',
         headers: {
@@ -84,7 +83,7 @@ class Api {
     ).then(this.checkResponse)
   }
 
-  changePassword ({ current_password, new_password }) {
+  changePassword({ current_password, new_password }) {
     const token = localStorage.getItem('token')
     return fetch(
       `/api/users/set_password/`,
@@ -98,19 +97,19 @@ class Api {
       }
     ).then(this.checkResponse)
   }
-  
-  createItems(create_items) {
+
+  createTasks(create_task) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url+'/api/items/',
+      this._url + '/api/tasks/',
       {
         method: 'POST',
         headers: {
           ...this._headers,
           ...authorization
         },
-        body: JSON.stringify(create_items)
+        body: JSON.stringify(create_task)
       }).then(this.checkResponse)
   }
 
@@ -118,7 +117,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url+'/api/groups/',
+      this._url + '/api/groups/',
       {
         method: 'POST',
         headers: {
@@ -146,15 +145,11 @@ class Api {
       }).then(this.checkResponse)
   }
 
-
-
-
-
   editData(edit_items) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url+'/api/groups/edit/',
+      this._url + '/api/groups/edit/',
       {
         method: 'POST',
         headers: {

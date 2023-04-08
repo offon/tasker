@@ -25,10 +25,10 @@ class UsersSet(viewsets.ViewSet):
 
 class TasksViewSet(viewsets.ViewSet):
     def create(self, request):
-        item = request.data.get('item')
-        if not item:
+        task = request.data.get('task')
+        if not task:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        serialiser = TaskSerialiser(data=item)
+        serialiser = TaskSerialiser(data=task)
         if serialiser.is_valid(raise_exception=True):
             serialiser.save(author=request.user)
             return return_all_data(request)
@@ -51,18 +51,18 @@ class GroupsViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        item = get_object_or_404(Group, pk=pk)
-        item.delete()
+        task = get_object_or_404(Group, pk=pk)
+        task.delete()
         return(return_all_data(request))
 
     @decorators.action(methods=["DELETE"], detail=False)
     def delete(self, request):
         data = request.data
-        delete_items = data.get('delete_items')
+        delete_tasks = data.get('delete_tasks')
         delete_groups = data.get('delete_groups')
 
-        if delete_items:
-            Task.objects.filter(id__in=delete_items).delete()
+        if delete_tasks:
+            Task.objects.filter(id__in=delete_tasks).delete()
             return return_all_data(request)
         if delete_groups:
             Group.objects.filter(id__in=delete_groups).delete()
@@ -72,14 +72,13 @@ class GroupsViewSet(viewsets.ViewSet):
     @decorators.action(methods=["POST"], detail=False)
     def edit(self, request):
         data = request.data
-        edit_items = data.get('edit_items')
-        if not edit_items:
+        edit_tasks = data.get('edit_tasks')
+        if not edit_tasks:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        if edit_items:
-            for item in edit_items:
-                serialiser = TaskSerialiser(item, data=item)
+        if edit_tasks:
+            for task in edit_tasks:
+                serialiser = TaskSerialiser(task, data=task)
                 if serialiser.is_valid(raise_exception=True):
                     serialiser.save(author=request.user)
             return return_all_data(request)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-

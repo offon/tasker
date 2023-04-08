@@ -1,27 +1,13 @@
 import SignIn from './signin'
 import SignUp from './signup'
-
-// import Main from './main'
-// import SingleCard from './single-card'
-// import RecipeEdit from './recipe-edit'
-// import Cart from './cart'
-// import Favorites from './favorites'
-// import Subscriptions from './subscriptions'
-// import RecipeCreate from './recipe-create'
-// import User from './user'
-// import ChangePassword from './change-password'
+import Main from './main'
+import ChangePassword from './change-password'
+import CreateTask from './create_task'
 
 export {
   SignIn,
   SignUp,
-
-  // Main,
-  // SingleCard,
-  // RecipeEdit,
-  // Cart,
-  // Favorites,
-  // Subscriptions,
-  // RecipeCreate,
-  // User,
-  // ChangePassword
+  Main,
+  CreateTask,
+  ChangePassword
 }

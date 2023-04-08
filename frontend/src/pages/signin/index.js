@@ -2,7 +2,7 @@ import { Container, Input, Title, Main, Form, Button } from '../../components'
 import styles from './styles.module.css'
 import { useFormWithValidation } from '../../utils'
 import { AuthContext } from '../../contexts'
-import { Redirect } from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useContext } from 'react'
 
 const SignIn = ({ onSignIn }) => {
@@ -10,9 +10,8 @@ const SignIn = ({ onSignIn }) => {
   const authContext = useContext(AuthContext)
 
   return <Main>
-    {/* {authContext && <Redirect to='/recipes' />} */}
+    {authContext && <Navigate to='/groups' />}
     <Container>
-
       <Title title='Войти на сайт' />
       <Form
         className={styles.form}

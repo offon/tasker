@@ -17,6 +17,7 @@ class CreateUserSerialiser(serializers.ModelSerializer):
         user.save()
         return user
 
+
 class GetUserSerialiser(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -47,8 +48,8 @@ class TaskSerialiser(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         try:
-            id_item = instance.get('id')
-            task = Task.objects.get(id=id_item)
+            id_task = instance.get('id')
+            task = Task.objects.get(id=id_task)
             group_id = validated_data.get('group_id')
             group = Group.objects.get(id=group_id)
             task.group = group
@@ -61,16 +62,16 @@ class TaskSerialiser(serializers.ModelSerializer):
 
 
 class GroupsCreateSerialiser(serializers.ModelSerializer):
-    items = serializers.SerializerMethodField()
+    tasks = serializers.SerializerMethodField()
 
     class Meta:
         model = Group
-        fields = ['id', 'title', 'items', 'group', 'position']
+        fields = ['id', 'title', 'tasks', 'group', 'position', 'board']
 
-    def get_items(self, object):
-        items = list(Task.objects.filter(group=object))
-        if items:
-            serialiser = TaskSerialiser(items, many=True)
+    def get_tasks(self, object):
+        tasks = list(Task.objects.filter(group=object))
+        if tasks:
+            serialiser = TaskSerialiser(tasks, many=True)
             return serialiser.data
         return []
 
@@ -80,18 +81,18 @@ class GroupsCreateSerialiser(serializers.ModelSerializer):
     def create(self, validated_data):
         group_name = validated_data.get('title')
         author = validated_data.get('author')
-        for initial_item in self.initial_data:
-            if group_name == initial_item.get('title'):
-                data = initial_item
+        for initial_task in self.initial_data:
+            if group_name == initial_task.get('title'):
+                data = initial_task
                 break
 
         with transaction.atomic():
-            items = []
-            if data.get('items'):
-                items = data.pop('items')
+            tasks = []
+            if data.get('tasks'):
+                tasks = data.pop('tasks')
             group, _ = Group.objects.get_or_create(**validated_data)
-            if items:
-                tasks = TaskCreateSerialiser(data=items, many=True)
+            if tasks:
+                tasks = TaskCreateSerialiser(data=tasks, many=True)
                 if tasks.is_valid(raise_exception=True):
                     tasks.save(group=group, author=author)
             return group
@@ -114,10 +115,10 @@ class BoardsEdirSerialiser(serializers.ModelSerializer):
     def create(self, validated_data):
         groups = self.initial_data.get('groups')
         author = validated_data.get('author')
-        delete_items = self.initial_data.pop('delete_items')
+        delete_tasks = self.initial_data.pop('delete_tasks')
         with transaction.atomic():
-            if delete_items:
-                Task.objects.filter(id__in=delete_items).delete()
+            if delete_tasks:
+                Task.objects.filter(id__in=delete_tasks).delete()
             Group.objects.all().delete()
             serialiser = GroupsCreateSerialiser(data=groups, many=True)
             if serialiser.is_valid(raise_exception=True):

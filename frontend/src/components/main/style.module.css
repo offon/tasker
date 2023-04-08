@@ -2,6 +2,18 @@
   min-height: calc(100vh - 210px);
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 @media screen and (max-width: 770px) {
   .main {

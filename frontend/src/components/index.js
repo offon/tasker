@@ -13,8 +13,6 @@ import ProtectedRoute from './protected-route'
 import Input from './input'
 import AccountMenu from './account-menu'
 import Nav from './nav'
-import Tag from './tag'
-import TagsContainer from './tags-container'
 import Textarea from './textarea'
 import Checkbox from './checkbox'
 import CheckboxGroup from './checkbox-group'
@@ -25,6 +23,7 @@ import Subscription from './subscription'
 import SubscriptionList from './subscription-list'
 import FileInput from './file-input'
 import IngredientsSearch from './ingredients-search'
+import Group from './group'
 
 export {
   Header,
@@ -40,10 +39,9 @@ export {
   Form,
   ProtectedRoute,
   Input,
+  Group,
   AccountMenu,
   Nav,
-  Tag,
-  TagsContainer,
   Textarea,
   Checkbox,
   CheckboxGroup,

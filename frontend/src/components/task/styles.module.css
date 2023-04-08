@@ -1,0 +1,15 @@
+.task {
+  display: flex;
+  background-color: white;
+  padding: 10px;
+  margin-top: 3px;
+  cursor: grab;
+}
+
+.task-name {
+  color: black;
+}
+
+.task-author {
+  color: black;
+}

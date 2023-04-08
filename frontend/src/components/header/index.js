@@ -9,7 +9,7 @@ const Header = ({ loggedIn, onSignOut}) => {
     <Container>
       <div className={styles.headerContent}>
         {/* <Nav loggedIn={loggedIn}/> */}
-        <AccountMenu onSignOut={onSignOut} />
+        <AccountMenu onSignOut={onSignOut}/>
       </div>
     </Container>
   </header>
