@@ -1,6 +1,6 @@
 import styles from './styles.module.css'
 import cn from 'classnames'
-
+import { useEffect, useState } from 'react'
 
 const Task = ({
   task,
@@ -10,6 +10,8 @@ const Task = ({
   dragOverHandler,
   dropHandler
 }) => {
+  // useEffect(_ => {
+  // }, [])
 
   return <div className={cn(styles.task)}
     key={task.id}

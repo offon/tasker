@@ -6,8 +6,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../api'
 
-const CreateTask = ({ promt, current_group, boards, setBoards }) => {
-  // const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation()
+const CreateTask = ({ promt, current_group, boards, setCurrentGroup }) => {
   const [taskTitle, setTitle] = useState('')
   const navigate = useNavigate()
   const canselhandler = () => {
@@ -18,7 +17,9 @@ const CreateTask = ({ promt, current_group, boards, setBoards }) => {
     api.createTasks({
       task
     }).then(res => {
-      setBoards(res)
+      current_group.tasks.push(res)
+      setCurrentGroup(current_group)
+      navigate('/groups')
     })
       .catch(err => {
         const errors = Object.values(err)
@@ -26,7 +27,6 @@ const CreateTask = ({ promt, current_group, boards, setBoards }) => {
           alert(errors.join(', '))
         }
       })
-    // this.setState({ task: '', current_group: null, modal_active: false })
     event.preventDefault();
   }
 
@@ -49,9 +49,6 @@ const CreateTask = ({ promt, current_group, boards, setBoards }) => {
           }
           create_task(event, data, boards)
           // setBoards(null)
-          navigate('/groups')
-
-
         }}
       >
         <Input

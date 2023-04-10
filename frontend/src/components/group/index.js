@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 const Group = ({ group, boards, setCurrentGroup, setCurrentTask, current_group, current_task, setBoards }) => {
   const navigate = useNavigate()
 
+
   const dragstartHandler = ({ task, group }) => {
     setCurrentGroup(group)
     setCurrentTask(task)
@@ -38,7 +39,6 @@ const Group = ({ group, boards, setCurrentGroup, setCurrentTask, current_group, 
     setCurrentGroup(group)
     navigate('/create_task')
   }
-
   return <div className={styles.group}
     key={group.id}
     onDragOver={(e) => dragOverHandler({ e })}

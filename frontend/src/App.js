@@ -170,7 +170,7 @@ function App() {
               <CreateTask
                 boards={boards}
                 current_group={current_group}
-                setBoards={setBoards}
+                setCurrentGroup={setCurrentGroup}
               />} /></Route>
         </Routes>
       </div>

@@ -11,7 +11,12 @@ const dragOverHandler = ({ e }) => {
     }
 }
 
-export { dragLeaveHandler, dragOverHandler } 
+const dragstartHandler = ({ task, group, setCurrentGroup, setCurrentTask }) => {
+    setCurrentGroup(group)
+    setCurrentTask(task)
+}
+
+export { dragLeaveHandler, dragOverHandler, dragstartHandler }
 
 
 

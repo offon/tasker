@@ -31,7 +31,7 @@ class TasksViewSet(viewsets.ViewSet):
         serialiser = TaskSerialiser(data=task)
         if serialiser.is_valid(raise_exception=True):
             serialiser.save(author=request.user)
-            return return_all_data(request)
+            return Response(serialiser.data, status=status.HTTP_200_OK)
         return Response(serialiser.error_messages, status=status.HTTP_200_OK)
 
 
