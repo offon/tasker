@@ -6,11 +6,11 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../api'
 
-const CreateTask = ({ promt, current_group, boards, setCurrentGroup }) => {
+const TaskCreate = ({ promt, current_group, setCurrentGroup, current_board}) => {
   const [taskTitle, setTitle] = useState('')
   const navigate = useNavigate()
   const canselhandler = () => {
-    navigate('/groups')
+    navigate(`/board/${current_board}/`)
   }
 
   const create_task = (event, task) => {
@@ -19,7 +19,7 @@ const CreateTask = ({ promt, current_group, boards, setCurrentGroup }) => {
     }).then(res => {
       current_group.tasks.push(res)
       setCurrentGroup(current_group)
-      navigate('/groups')
+      navigate(`/board/${current_board}/`)
     })
       .catch(err => {
         const errors = Object.values(err)
@@ -36,8 +36,6 @@ const CreateTask = ({ promt, current_group, boards, setCurrentGroup }) => {
 
   return <Main>
     <Container>
-      <Title title='Создать задачу' />
-      {current_group ? null : <Navigate to="/groups" />}
       <Form
         className={styles.form}
         onSubmit={event => {
@@ -47,8 +45,7 @@ const CreateTask = ({ promt, current_group, boards, setCurrentGroup }) => {
             group: current_group.id,
             position: current_group.tasks.length + 1
           }
-          create_task(event, data, boards)
-          // setBoards(null)
+          create_task(event, data)
         }}
       >
         <Input
@@ -83,4 +80,4 @@ const CreateTask = ({ promt, current_group, boards, setCurrentGroup }) => {
   </Main>
 }
 
-export default CreateTask
+export default TaskCreate

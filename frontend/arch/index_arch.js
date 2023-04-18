@@ -353,11 +353,9 @@ class Boards extends React.Component{
 
 // Send data to server
     saveDataToServer(){
-      console.log('SandData')
       const delete_items = this.state.delete_items
       const delete_groups = this.state.delete_groups
       let data = []
-      console.log(delete_items)
       for (let i=0;  i < this.state.groups.length; i++) {
         if (this.state.groups[i].status === 'edit') {
           let add_arr = this.state.groups[i].items

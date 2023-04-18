@@ -1,11 +1,12 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 30px;
+  justify-content: left;
 }
 
 .headerContent {
+  height: 40px;
+  background-color: #0079BF;
   display: flex;
   align-items: center;
   justify-content: space-between;

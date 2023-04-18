@@ -24,10 +24,43 @@ class GetUserSerialiser(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'username', 'email']
 
 
+class BoardSerialiser(serializers.ModelSerializer):
+
+    class Meta:
+        model = Board
+        fields = ('id', 'title')
+
+
 class GroupSerialiser(serializers.ModelSerializer):
     class Meta:
         model = Group
         fields = ['title', 'board', 'position']
+
+
+class GroupUpdateSerialiser(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['title', 'board', 'position']
+
+    def update(self, instance, validated_data):
+        instance.position = validated_data.get('position', instance.position)
+        instance.save()
+        return instance
+
+
+class GroupListSerialiser(serializers.ListSerializer):
+    child = GroupUpdateSerialiser()
+
+    def validate(self, attrs):
+        return attrs
+
+    def update(self, instance, validated_data):
+        for group_data in self.context.get('groups'):
+            group_id = group_data.get('id')
+            group = instance.get(id=group_id)
+            if group is not None:
+                self.child.update(validated_data=group_data, instance=group)
+        return instance
 
 
 class TaskCreateSerialiser(serializers.ModelSerializer):
@@ -43,22 +76,27 @@ class TaskSerialiser(serializers.ModelSerializer):
         model = Task
         fields = ['id', 'group', 'title', 'position']
 
-    def validate(self, attrs):
-        return attrs
+
+class TaskUpdateSerialiser(TaskSerialiser):
 
     def update(self, instance, validated_data):
-        try:
-            id_task = instance.get('id')
-            task = Task.objects.get(id=id_task)
-            group_id = validated_data.get('group_id')
-            group = Group.objects.get(id=group_id)
-            task.group = group
-            task.title = validated_data.get('title', task.title)
-            task.position = validated_data.get('position', task.position)
-            task.save()
-            return task
-        except AttributeError:
-            return serializers.ValidationError
+        group = Group.objects.get(id=validated_data.get('group'))
+        instance.position = validated_data.get('position', instance.position)
+        instance.group = group or instance.group
+        instance.save()
+        return instance
+
+
+class TaskListSerializer(serializers.ListSerializer):
+    child = TaskUpdateSerialiser()
+
+    def update(self, instance, validated_data):
+        for task_data in self.context.get('tasks'):
+            task_id = task_data.get('id')
+            task = instance.get(id=task_id)
+            if task is not None:
+                self.child.update(validated_data=task_data, instance=task)
+        return instance
 
 
 class GroupsCreateSerialiser(serializers.ModelSerializer):
@@ -66,10 +104,10 @@ class GroupsCreateSerialiser(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ['id', 'title', 'tasks', 'group', 'position', 'board']
+        fields = ['id', 'title', 'tasks', 'position', 'board']
 
     def get_tasks(self, object):
-        tasks = list(Task.objects.filter(group=object))
+        tasks = list(Task.objects.filter(group=object).order_by("position"))
         if tasks:
             serialiser = TaskSerialiser(tasks, many=True)
             return serialiser.data

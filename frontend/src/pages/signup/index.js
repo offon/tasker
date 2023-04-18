@@ -10,7 +10,6 @@ const SignUp = ({ onSignUp }) => {
   const authContext = useContext(AuthContext)
 
   return <Main>
-    {/* {authContext && <Redirect to='/groups' />} */}
     <Container>
       <Title title='Регистрация' />
       <Form className={styles.form} onSubmit={e => {

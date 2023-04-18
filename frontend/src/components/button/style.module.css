@@ -4,10 +4,10 @@
   font-weight: 600;
   font-size: 14px;
   background: none;
-  border-radius: 6px;
+  border-radius: 2px;
   padding: 0px 24px;
-  height: 48px;
-  line-height: 48px;
+  height: 40px;
+  line-height: 40px;
   text-decoration: none;
   border: 1px solid transparent;
   transition: background 0.2s;
@@ -66,10 +66,19 @@
   box-shadow: none;
 }
 
+.button_style_delete {
+  color: #FFF;
+  margin: 10px;
+  background-color: rgb(166, 83, 83);
+}
+
+.button_style_delete:hover {
+  background: rgb(147, 13, 13);
+}
 
 @media screen and (max-width: 940px) {
   .button {
-    font-size: 12px!important;
+    font-size: 12px !important;
     padding: 0px 12px;
     height: 32px;
     line-height: 30px;

@@ -14,17 +14,32 @@ class Api {
     })
   }
 
-  getGroupsData() {
+  getBoardData(id) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url + '/api/groups/',
+      `${this._url}/api/board/${id}/`,
       {
         method: 'GET',
         headers: {
           ...this._headers,
           ...authorization
         }
+      }).then(this.checkResponse)
+  }
+
+  createBoard(data) {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    return fetch(
+      this._url + '/api/boards/',
+      {
+        method: 'POST',
+        headers: {
+          ...this._headers,
+          ...authorization
+        },
+        body: JSON.stringify(data)
       }).then(this.checkResponse)
   }
 
@@ -42,7 +57,6 @@ class Api {
   }
 
   signout() {
-    console.log('Выход')
     const token = localStorage.getItem('token')
     return fetch(
       this._url + '/api/users/logout/',
@@ -113,6 +127,66 @@ class Api {
       }).then(this.checkResponse)
   }
 
+  deleteTasks(task_id) {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    return fetch(
+      `${this._url}/api/tasks/${task_id.id}/`,
+      {
+        method: 'DELETE',
+        headers: {
+          ...this._headers,
+          ...authorization
+        }
+      }).then(this.checkResponse)
+  }
+
+  editTasks(title, id) {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    return fetch(
+      `${this._url}/api/tasks/${id}/`,
+      {
+        method: 'PATCH',
+        headers: {
+          ...this._headers,
+          ...authorization
+        },
+        body: JSON.stringify(title)
+      }).then(this.checkResponse)
+  }
+
+  moveTasks(tasks_from, tasks_to) {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    let tasks = [...tasks_from, ...tasks_to]
+    return fetch(
+      this._url + '/api/tasks/move/',
+      {
+        method: 'POST',
+        headers: {
+          ...this._headers,
+          ...authorization
+        },
+        body: JSON.stringify({ tasks })
+      }).then(this.checkResponse)
+  }
+
+  moveGroups(boards) {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    return fetch(
+      this._url + '/api/groups/move/',
+      {
+        method: 'POST',
+        headers: {
+          ...this._headers,
+          ...authorization
+        },
+        body: JSON.stringify({ boards })
+      }).then(this.checkResponse)
+  }
+
   createGroups(create_group) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
@@ -128,35 +202,75 @@ class Api {
       }).then(this.checkResponse)
   }
 
+  editGroup(title, id) {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    return fetch(
+      `${this._url}/api/groups/${id}/`,
+      {
+        method: 'PATCH',
+        headers: {
+          ...this._headers,
+          ...authorization
+        },
+        body: JSON.stringify(title)
+      }).then(this.checkResponse)
+  }
+
+  editBoard(title, id) {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    return fetch(
+      `${this._url}/api/board/${id}/`,
+      {
+        method: 'PATCH',
+        headers: {
+          ...this._headers,
+          ...authorization
+        },
+        body: JSON.stringify(title)
+      }).then(this.checkResponse)
+    }
+
+  getboards() {
+    const token = localStorage.getItem('token')
+    const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    return fetch(
+      this._url + '/api/boards/',
+      {
+        method: 'GET',
+        headers: {
+          ...this._headers,
+          ...authorization
+        }
+      }).then(this.checkResponse)
+  }
+
   deleteGroup(group) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
-    const url = this._url + `/api/groups/${group.current_group.id}/`
-    console.log(url)
     return fetch(
-      url,
+      `${this._url}/api/groups/${group.id}/`,
       {
         method: 'DELETE',
         headers: {
           ...this._headers,
           ...authorization
-        },
-        // body: JSON.stringify(group)
+        }
       }).then(this.checkResponse)
   }
-
-  editData(edit_items) {
+  deleteBoard(id) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
+    console.log(id)
     return fetch(
-      this._url + '/api/groups/edit/',
+      `${this._url}/api/boards/${id}/`,
       {
-        method: 'POST',
+        method: 'DELETE',
         headers: {
           ...this._headers,
           ...authorization
-        },
-        body: JSON.stringify(edit_items)
+        }
       }).then(this.checkResponse)
   }
 

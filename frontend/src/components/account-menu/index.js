@@ -1,7 +1,7 @@
-import cn from 'classnames'
+// import cn from 'classnames'
 import styles from './styles.module.css'
 import { useContext } from 'react'
-import { Button, LinkComponent } from '../index.js'
+import { LinkComponent } from '../index.js'
 import { AuthContext } from '../../contexts'
 
 const AccountMenu = ({ onSignOut }) => {
@@ -16,7 +16,7 @@ const AccountMenu = ({ onSignOut }) => {
       <LinkComponent
         href='/signup'
         title='Создать аккаунт'
-        className={styles.menuButton}
+        className={styles.menuLink}
       />
     </div>
   }
@@ -27,6 +27,7 @@ const AccountMenu = ({ onSignOut }) => {
       title='Изменить пароль'
     />
     <a
+      href='/signin'
       className={styles.menuLink}
       onClick={onSignOut}
     >
@@ -34,6 +35,5 @@ const AccountMenu = ({ onSignOut }) => {
     </a>
   </div>
 }
-
 
 export default AccountMenu

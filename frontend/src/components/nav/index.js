@@ -1,30 +1,31 @@
-// import styles from './style.module.css'
-// import cn from 'classnames'
-// import { LinkComponent } from '../index'
-// import navigation from '../../configs/navigation'
+import styles from './style.module.css'
+import { useNavigate } from 'react-router-dom'
 
-// const Nav = ({ loggedIn, orders }) => {
-//   return <nav className={styles.nav}>
-//     <div className={styles.nav__container}>
-//       <ul className={styles.nav__items}>
-//         {navigation.map(item => {
-//           if (!loggedIn && item.auth) { return null }
-//           return <li className={cn(styles.nav__item, {
-//             [styles.nav__item_active]: false
-//           })} key={item.href}>
-//             <LinkComponent
-//               title={item.title}
-//               activeClassName={styles.nav__link_active}
-//               href={item.href}
-//               exact
-//               className={styles.nav__link}
-//             />
-//             {item.href === '/cart' && orders > 0 && <span className={styles['orders-count']}>{orders}</span>}
-//           </li>
-//         })}
-//       </ul>
-//     </div>
-//   </nav>
-// }
+const Nav = ({ loggedIn, boards, current_board, setGroup, setCurrentBoard }) => {
+  const navigate = useNavigate();
+  if (!loggedIn) {
+    return <nav className={styles.nav}></nav>
+  }
+  const getSelectBoard = (e) => {
+    setGroup(null)
+    e.target.value === 'create_board' ? navigate('/create_board') : navigate(`/board/${e.target.value}/`)
+  }
+  return <nav className={styles.nav}>
+    <div className={styles.lable}>Доступные доски: </div>
+    <div className={styles.nav__container}>
+      <select
+        onChange={e => getSelectBoard(e)}
+        className={styles.nav__select}>
+        {current_board ? null : <option>Выберите доску</option>}
+        {boards ? boards.map((board) => <option value={board.id}>{board.title}</option>) : null}
+        <option value='create_board'>Создать доску</option>
+      </select>
+      {current_board ? <div
+        className={styles.lable}
+        onClick={(e) => navigate(`/boards/${current_board}/edit/`)}> Редактирование доски</div> : null}
 
-// export default Nav
+    </div>
+  </nav>
+}
+
+export default Nav

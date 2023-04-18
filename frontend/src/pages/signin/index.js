@@ -10,7 +10,7 @@ const SignIn = ({ onSignIn }) => {
   const authContext = useContext(AuthContext)
 
   return <Main>
-    {authContext && <Navigate to='/groups' />}
+    {authContext && <Navigate to='/' />}
     <Container>
       <Title title='Войти на сайт' />
       <Form

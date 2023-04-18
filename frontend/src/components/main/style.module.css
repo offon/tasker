@@ -15,8 +15,8 @@
   justify-content: space-between;
 }
 
-@media screen and (max-width: 770px) {
+/* @media screen and (max-width: 770px) {
   .main {
     min-height: calc(100vh - 170px);
   }
-}
+} */

@@ -2,14 +2,25 @@
   display: flex;
   background-color: white;
   padding: 10px;
-  margin-top: 3px;
+  margin-top: 8px;
+  border-radius: 3px;
+  box-shadow: 0 1px 0 rgba(9, 30, 66, .25);
   cursor: grab;
+}
+
+.task:hover {
+  box-shadow: 0 1px 0 rgba(9, 30, 66, .25), 0 5px 10px rgba(9, 30, 66, .1);
 }
 
 .task-name {
   color: black;
+  font-size: 16px;
+  font-weight: 500;
+  margin-right: 8px;
 }
 
 .task-author {
-  color: black;
+  color: #6B778C;
+  font-size: 14px;
+  font-weight: 400;
 }
