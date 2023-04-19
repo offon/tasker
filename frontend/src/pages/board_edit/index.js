@@ -1,13 +1,12 @@
-import { Container, Input, Title, Form, Button, Textarea } from '../../components'
+import { Container, Input, Title, Form, Button } from '../../components'
 import styles from './styles.module.css'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../api'
 
-const BoardEdit = ({ current_board, boards, getBoardsData }) => {
+const BoardEdit = ({ boardsData:{current_board, boards, navigate }}) => {
   const [groupTitle, setTitle] = useState('')
 
-  const navigate = useNavigate()
   const canselhandler = () => {
     navigate(`/board/${current_board}/`)
   }

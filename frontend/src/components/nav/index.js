@@ -1,8 +1,7 @@
 import styles from './style.module.css'
-import { useNavigate } from 'react-router-dom'
 
-const Nav = ({ loggedIn, boards, current_board, setGroup, setCurrentBoard }) => {
-  const navigate = useNavigate();
+const Nav = ({ loginData: { loggedIn, navigate }, boardsData:{boards, current_board, setGroup} }) => {
+  
   if (!loggedIn) {
     return <nav className={styles.nav}></nav>
   }

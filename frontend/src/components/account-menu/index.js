@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { LinkComponent } from '../index.js'
 import { AuthContext } from '../../contexts'
 
-const AccountMenu = ({ onSignOut }) => {
+const AccountMenu = ({ loginData: { setLoggedIn }, onSignOut }) => {
   const authContext = useContext(AuthContext)
   if (!authContext) {
     return <div className={styles.menu}>
@@ -29,7 +29,9 @@ const AccountMenu = ({ onSignOut }) => {
     <a
       href='/signin'
       className={styles.menuLink}
-      onClick={onSignOut}
+      onClick={()=>{
+        onSignOut(setLoggedIn)
+      }}
     >
       Выход
     </a>

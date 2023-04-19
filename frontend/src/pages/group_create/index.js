@@ -6,7 +6,7 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../api'
 
-const GroupCreate = ({ groups, setGroup, current_board }) => {
+const GroupCreate = ({ boardsData: {groups, setGroup, current_board }}) => {
   const [taskTitle, setTitle] = useState('')
   const navigate = useNavigate()
   const canselhandler = () => {

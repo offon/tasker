@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react'
 import { Header, ProtectedRoute } from './components'
 import api from './api'
 import styles from './styles.module.css'
-// import cn from 'classnames'
+import { authorization, registration, onSignOut, changePassword } from './utils/login_utils'
+import { getBoardsData, getBoardData } from './utils/boards_utils'
 import { AuthContext, UserContext } from './contexts'
 import {
   Board, SignUp, SignIn,
@@ -14,123 +15,51 @@ import {
 
 
 function App() {
-  const navigate = useNavigate();
-
   const [loggedIn, setLoggedIn] = useState(null)
   const [user, setUser] = useState({})
+
   const [boards, setBoards] = useState(null);
   const [groups, setGroup] = useState(null);
   const [current_board, setCurrentBoard] = useState(null)
   const [current_group, setCurrentGroup] = useState(null)
   const [current_task, setCurrentTask] = useState(null)
+  const navigate = useNavigate();
 
+  const loginData = {
+    'loggedIn': loggedIn,
+    'user': user,
+    'setLoggedIn': setLoggedIn,
+    'setUser': setUser,
+    'navigate': navigate
+  }
 
-  const registration = ({
-    email,
-    password,
-    username,
-    first_name,
-    last_name
-  }) => {
-    api.signup({ email, password, username, first_name, last_name })
-      .then(res => {
-        navigate('/signin')
-      })
-      .catch(err => {
-        const errors = Object.values(err)
-        if (errors) {
-          alert(errors.join(', '))
-        }
-        setLoggedIn(false)
-      })
+  const boardsData = {
+    'boards': boards,
+    'groups': groups,
+    'current_board': current_board,
+    'current_group': current_group,
+    'current_task': current_task,
+    'navigate': navigate,
+    'setBoards': setBoards,
+    'setGroup': setGroup,
+    'setCurrentBoard': setCurrentBoard,
+    'setCurrentGroup': setCurrentGroup,
+    'setCurrentTask': setCurrentTask
   }
-  const authorization = ({
-    email, password
-  }) => {
-    api.signin({
-      email, password
-    }).then(res => {
-      if (res.auth_token) {
-        localStorage.setItem('token', res.auth_token)
-        api.getUserData()
-          .then(res => {
-            setUser(res)
-            setLoggedIn(true)
-            // getBoardsData()
-            navigate('/')
-          })
-          .catch(err => {
-            setLoggedIn(false)
-            navigate('/signin')
-          })
-      } else {
-        setLoggedIn(false)
-      }
-    })
-      .catch(err => {
-        const errors = Object.values(err)
-        if (errors) {
-          alert(errors.join(', '))
-        }
-        setLoggedIn(false)
-      })
-  }
-  const onSignOut = () => {
-    api
-      .signout()
-      .then(res => {
-        localStorage.removeItem('token')
-        setLoggedIn(false)
-      })
-      .catch(err => {
-        const errors = Object.values(err)
-        if (errors) {
-          alert(errors.join(', '))
-        }
-      })
-  }
-  const changePassword = ({
-    new_password,
-    current_password
-  }) => {
-    api.changePassword({ new_password, current_password })
-      .then(res => {
-        navigate('/signin')
-      })
-      .catch(err => {
-        const errors = Object.values(err)
-        if (errors) {
-          alert(errors.join(', '))
-        }
-      })
-  }
-  const getBoardData = (id) => {
-    api.getBoardData(id)
-      .then(res => {
-        setGroup(res);
-        navigate(`/board/${id}/`);
-      })
-      .catch(err => {
-        const errors = Object.values(err);
-        if (errors) {
-          alert(errors.join(', '));
-        }
-      });
-  };
 
-  const getBoardsData = () => {
-    
-    api.getboards()
-      .then(res => {
-        console.log('res')
-        console.log(res)
-        setBoards(res)
-      }).catch(errors => {
-        if (errors) {
-          alert(errors.join(', '))
-        }
-      })
-  }
+  // const getBoardData = (id) => {
+  //   api.getBoardData(id)
+  //     .then(res => {
+  //       setGroup(res);
+  //       navigate(`/board/${id}/`);
+  //     })
+  //     .catch(err => {
+  //       const errors = Object.values(err);
+  //       if (errors) {
+  //         alert(errors.join(', '));
+  //       }
+  //     });
+  // };
 
   useEffect(_ => {
     const token = localStorage.getItem('token')
@@ -139,7 +68,7 @@ function App() {
         .then(res => {
           setUser(res)
           setLoggedIn(true)
-          getBoardsData()
+          getBoardsData(setBoards)
         })
         .catch(err => {
           setLoggedIn(false)
@@ -156,89 +85,52 @@ function App() {
   return <AuthContext.Provider value={loggedIn}>
     <UserContext.Provider value={user}>
       <Header
-        loggedIn={loggedIn}
-        boards={boards}
-        current_board={current_board}
-        setGroup={setGroup}
-        setCurrentBoard={setCurrentBoard}
-        onSignOut={onSignOut} />
+        onSignOut={onSignOut}
+        loginData={loginData}
+        boardsData={boardsData}
+      />
       <Routes>
-        <Route exact path="/signin" element={<SignIn onSignIn={authorization} />} />
-        <Route exact path="/signup" element={<SignUp onSignUp={registration} />} />
-        <Route exact path="/change-password" element={<ChangePassword onPasswordChange={changePassword} />} />
+        <Route exact path="/signin" element={<SignIn onSignIn={authorization} loginData={loginData} />} />
+        <Route exact path="/signup" element={<SignUp onSignUp={registration} loginData={loginData} />} />
+        <Route exact path="/change-password" element={<ChangePassword onPasswordChange={changePassword} navigate={navigate} />} />
         <Route exact path="/" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/" element={
-            <Main
-              current_board={current_board}
-              boards={boards}
-              setCurrentBoard={setCurrentBoard}
-              getBoardsData={getBoardsData}
-            />} /></Route>
+            <Main />} /></Route>
         <Route exact path="/board/:id" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/board/:id" element={
             <Board
-              boards={boards}
-              current_board={current_board}
-              groups={groups}
-              current_group={current_group}
-              current_task={current_task}
-              setGroup={setGroup}
+              boardsData={boardsData}
               getBoardData={getBoardData}
-              setCurrentGroup={setCurrentGroup}
-              setCurrentTask={setCurrentTask}
-              setCurrentBoard={setCurrentBoard}
             />} /></Route>
-
         <Route exact path="/boards/:id/edit" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/boards/:id/edit" element={
             <BoardEdit
-              boards={boards}
-              current_task={current_task}
-              current_board={current_board}
-              current_group={current_group}
-              getBoardsData={getBoardsData}
-              setCurrentTask={setCurrentTask}
+              boardsData={boardsData}
             />} /></Route>
-
-
         <Route exact path="/create_board" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/create_board" element={
             <BoardCreate
-              boards={boards}
-              setCurrentBoard={setCurrentBoard}
+              boardsData={boardsData}
             />} /></Route>
-
         <Route exact path="/create_task" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/create_task" element={
             <TaskCreate
-              current_group={current_group}
-              current_board={current_board}
-              setCurrentGroup={setCurrentGroup}
+              boardsData={boardsData}
             />} /></Route>
         <Route exact path="/create_group" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/create_group" element={
             <GroupCreate
-              groups={groups}
-              current_board={current_board}
-              setGroup={setGroup}
+              boardsData={boardsData}
             />} /></Route>
         <Route exact path="/task/:id/edit" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/task/:id/edit" element={
             <TaskEdit
-              current_task={current_task}
-              current_board={current_board}
-              current_group={current_group}
-              setCurrentTask={setCurrentTask}
+              boardsData={boardsData}
             />} /></Route>
         <Route exact path="/groups/:id/edit" element={<ProtectedRoute loggedIn={loggedIn} />}>
           <Route path="/groups/:id/edit" element={
             <GroupEdit
-              groups={groups}
-              current_board={current_board}
-              current_task={current_task}
-              current_group={current_group}
-              setCurrentTask={setCurrentTask}
-              setGroup={setGroup}
+              boardsData={boardsData}
             />} /></Route>
       </Routes>
     </UserContext.Provider>

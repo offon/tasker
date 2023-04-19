@@ -1,14 +1,13 @@
-import { Container, Input, Title, Main, Form, Button, Textarea } from '../../components'
+import { Container, Input, Title, Form, Button, Textarea } from '../../components'
 import styles from './styles.module.css'
 import { useFormWithValidation } from '../../utils'
 import { AuthContext } from '../../contexts'
-import { Navigate, useNavigate, useParams } from 'react-router-dom'
+import {  useParams } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../api'
 
-const GroupEdit = ({ promt, current_task, current_group, setCurrentTask, setCurrentGroup, groups, setGroup, current_board }) => {
+const GroupEdit = ({ boardsData: { current_group, groups, current_board, navigate } }) => {
   const [groupTitle, setTitle] = useState('')
-  const navigate = useNavigate()
   const canselhandler = () => {
     navigate(`/board/${current_board}/`)
   }
@@ -37,7 +36,7 @@ const GroupEdit = ({ promt, current_task, current_group, setCurrentTask, setCurr
       id
     ).then(res => {
       const current_index = groups.indexOf(current_group)
-      groups[current_index].title=res['title']
+      groups[current_index].title = res['title']
       navigate(`/board/${current_board}/`)
     })
       .catch(err => {
@@ -53,8 +52,7 @@ const GroupEdit = ({ promt, current_task, current_group, setCurrentTask, setCurr
     return groupTitle === ''
   }
 
-  return <Main>
-    <Container>
+  return <Container>
       <Title title='Редактирование группы' />
       <Form
         className={styles.form}
@@ -102,7 +100,6 @@ const GroupEdit = ({ promt, current_task, current_group, setCurrentTask, setCurr
         </Button>
       </Form>
     </Container>
-  </Main>
 }
 
 export default GroupEdit

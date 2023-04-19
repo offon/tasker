@@ -13,7 +13,7 @@ const Group = ({
   setCurrentTask,
   current_group,
   current_task,
-  setGroups }) => {
+  setGroup }) => {
   const navigate = useNavigate()
   const dragstartHandler = ({ task, group }) => {
     setCurrentGroup(group)

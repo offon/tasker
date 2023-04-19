@@ -5,7 +5,8 @@ import { AuthContext } from '../../contexts'
 import { Navigate } from 'react-router-dom'
 import { useContext } from 'react'
 
-const SignIn = ({ onSignIn }) => {
+
+const SignIn = ({ onSignIn, loginData }) => {
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation()
   const authContext = useContext(AuthContext)
 
@@ -17,7 +18,7 @@ const SignIn = ({ onSignIn }) => {
         className={styles.form}
         onSubmit={e => {
           e.preventDefault()
-          onSignIn(values)
+          onSignIn({values, loginData})
         }}
       >
         <Input

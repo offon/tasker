@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts'
 
-const SignUp = ({ onSignUp }) => {
+const SignUp = ({ onSignUp, loginData }) => {
   const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation()
   const authContext = useContext(AuthContext)
 
@@ -14,7 +14,7 @@ const SignUp = ({ onSignUp }) => {
       <Title title='Регистрация' />
       <Form className={styles.form} onSubmit={e => {
         e.preventDefault()
-        onSignUp(values)
+        onSignUp({values, loginData})
       }}>
         <Input
           label='Имя'

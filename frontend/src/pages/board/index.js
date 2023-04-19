@@ -1,36 +1,37 @@
 import { Container, Group } from '../../components'
 import styles from './styles.module.css'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 const Board = ({
   getBoardData,
-  groups,
-  current_group,
-  current_task,
-  setCurrentGroup,
-  setCurrentTask,
-  setGroups,
-  setCurrentBoard,
-}) => {
-  const navigate = useNavigate()
+  boardsData: {
+    groups,
+    current_group,
+    current_task,
+    setCurrentGroup,
+    setCurrentTask,
+    setGroup,
+    setCurrentBoard,
+    navigate
+  } }) => {
   const { id } = useParams()
 
   id && setCurrentBoard(id);
 
   if (!groups) {
-    getBoardData(id)
+    getBoardData({ id, setGroup, navigate })
     return <div className={styles.loading}>Загрузка</div>
   }
   const group_crate = (e) => {
     navigate('/create_group')
   }
-  
+
   return <Container>
     <div className={styles.board}>
       {groups.map(group => <Group
         group={group}
         groups={groups}
-        setGroups={setGroups}
+        setGroup={setGroup}
         current_group={current_group}
         current_task={current_task}
         setCurrentGroup={setCurrentGroup}
