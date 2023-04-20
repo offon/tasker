@@ -20,7 +20,6 @@ const FileInput = ({ label, onChange, file = null, className }) => {
       onChange(reader.result)
     };
     reader.onerror = function (error) {
-      console.log('Error: ', error);
     }
   }
 

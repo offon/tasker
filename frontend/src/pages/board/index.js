@@ -1,25 +1,31 @@
 import { Container, Group } from '../../components'
 import styles from './styles.module.css'
 import { useParams } from 'react-router-dom'
+import React, { useEffect } from 'react'
 
 const Board = ({
   getBoardData,
+  getBoardsData,
   boardsData: {
     groups,
-    current_group,
-    current_task,
-    setCurrentGroup,
-    setCurrentTask,
+    current_board,
     setGroup,
     setCurrentBoard,
+    setBoards,
     navigate
-  } }) => {
+  },
+  boardsData
+}) => {
   const { id } = useParams()
 
   id && setCurrentBoard(id);
 
-  if (!groups) {
+  useEffect(() => {
     getBoardData({ id, setGroup, navigate })
+    getBoardsData(setBoards)
+  }, [current_board]);
+
+  if (!groups) {
     return <div className={styles.loading}>Загрузка</div>
   }
   const group_crate = (e) => {
@@ -30,12 +36,7 @@ const Board = ({
     <div className={styles.board}>
       {groups.map(group => <Group
         group={group}
-        groups={groups}
-        setGroup={setGroup}
-        current_group={current_group}
-        current_task={current_task}
-        setCurrentGroup={setCurrentGroup}
-        setCurrentTask={setCurrentTask}
+        boardsData={boardsData}
       />)}
       <div className={styles.group}>
         <div className={styles.group_header} onClick={(e) => { group_crate(e) }}>

@@ -262,7 +262,6 @@ class Api {
   deleteBoard(id) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
-    console.log(id)
     return fetch(
       `${this._url}/api/boards/${id}/`,
       {

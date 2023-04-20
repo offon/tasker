@@ -1,7 +1,7 @@
 import styles from './style.module.css'
 
-const Nav = ({ loginData: { loggedIn, navigate }, boardsData:{boards, current_board, setGroup} }) => {
-  
+const Nav = ({ loginData: { loggedIn, navigate }, boardsData: { boards, current_board, setGroup } }) => {
+
   if (!loggedIn) {
     return <nav className={styles.nav}></nav>
   }
