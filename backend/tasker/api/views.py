@@ -1,4 +1,6 @@
 from django.shortcuts import get_object_or_404
+from djoser import utils
+from djoser.serializers import SetPasswordSerializer
 from rest_framework import decorators, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -23,6 +25,19 @@ class UsersSet(viewsets.ViewSet):
     def me(self, request):
         serialiser = GetUserSerialiser(request.user)
         return Response(serialiser.data, status=status.HTTP_200_OK)
+
+    @action(
+        ["post", ],
+        detail=False,
+    )
+    def set_password(self, request):
+        serializer = SetPasswordSerializer(
+            data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        self.request.user.set_password(serializer.data["new_password"])
+        self.request.user.save()
+        utils.logout_user(self.request)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class BoardsViewSet(viewsets.ViewSet):

@@ -2,6 +2,7 @@ from django.urls import include, path
 from djoser.views import TokenCreateView, TokenDestroyView
 from rest_framework import routers
 
+
 from .views import (BoardsViewSet, BoardViewSet, GroupsViewSet, TasksViewSet,
                     UsersSet)
 

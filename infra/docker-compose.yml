@@ -18,15 +18,15 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    command: >
-        bash -c "python manage.py makemigrations && python manage.py migrate && create_superuser.sh && gunicorn tasker.wsgi:application -b 0.0.0.0:8000"
     restart: always
     volumes:
       - static_value:/app/static/
+      - ./create_superuser.sh:/app/create_superuser.sh:ro
     depends_on:
       - db
     env_file:
       - ./.env
+    entrypoint: /app/entrypoint.sh
   nginx:
     image: nginx:1.19.3
     ports:
