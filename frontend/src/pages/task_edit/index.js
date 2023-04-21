@@ -1,7 +1,5 @@
 import { Container, Input, Title, Form, Button } from '../../components'
 import styles from './styles.module.css'
-import { useFormWithValidation } from '../../utils'
-import { AuthContext } from '../../contexts'
 import { useParams } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../api'

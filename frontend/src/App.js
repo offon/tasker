@@ -13,7 +13,6 @@ import {
   Main, BoardCreate, BoardEdit
 } from './pages'
 
-
 function App() {
   const [loggedIn, setLoggedIn] = useState(null)
   const [user, setUser] = useState({})

@@ -7,7 +7,7 @@ import { useContext } from 'react'
 
 
 const SignIn = ({ onSignIn, loginData }) => {
-  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation()
+  const { values, handleChange, isValid } = useFormWithValidation()
   const authContext = useContext(AuthContext)
 
   return <Main>

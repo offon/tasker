@@ -1,8 +1,6 @@
 import cn from 'classnames'
 import styles from './styles.module.css'
-import { useState } from 'react'
 import { Icons } from '../index'
-import { hexToRgba } from '../../utils'
 
 const Checkbox = ({
   onChange,
@@ -31,6 +29,5 @@ const Checkbox = ({
     <span>{name}</span>
   </div>
 }
-
 
 export default Checkbox

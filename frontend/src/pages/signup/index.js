@@ -1,12 +1,11 @@
 import { Container, Input, Title, Main, Form, Button } from '../../components'
 import styles from './styles.module.css'
 import { useFormWithValidation } from '../../utils'
-import { Redirect } from 'react-router-dom'
 import { useContext } from 'react'
 import { AuthContext } from '../../contexts'
 
 const SignUp = ({ onSignUp, loginData }) => {
-  const { values, handleChange, errors, isValid, resetForm } = useFormWithValidation()
+  const { values, handleChange, isValid } = useFormWithValidation()
   const authContext = useContext(AuthContext)
 
   return <Main>

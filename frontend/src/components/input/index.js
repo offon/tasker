@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import styles from './styles.module.css'
 import cn from 'classnames'
 
 const Input = ({
     onChange,
-    placeholder,
     label,
-    disabled,
     type = 'text',
     inputClassName,
     labelClassName,

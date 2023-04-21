@@ -11,7 +11,6 @@ const set_index_for_boards = (boards) => {
         boards[i].position = i + 1
     }
 }
-
 const dragOverHandler = ({ e, styles, current_task }) => {
     e.preventDefault()
     if (classnames(e.target.className) === classnames(styles.task) && current_task != null) {
@@ -19,7 +18,6 @@ const dragOverHandler = ({ e, styles, current_task }) => {
         e.target.style.marginBottom = '10px'
     }
 }
-
 const dropGroupHandler = ({ e, group, boardsData: { current_task, setCurrentTask, current_group, setCurrentGroup } }) => {
     if (current_task) {
         current_task.group = group.id
@@ -34,11 +32,9 @@ const dropGroupHandler = ({ e, group, boardsData: { current_task, setCurrentTask
         api.moveTasks(current_group.tasks, group.tasks)
     }
 }
-
 const dragStartHandlerGroup = ({ group, boardsData: { setCurrentGroup } }) => {
     setCurrentGroup(group)
 }
-
 const dropHandlerGroup = ({
     e,
     group,
@@ -63,7 +59,6 @@ const dropHandlerGroup = ({
     e.target.style.boxShadow = 'none'
     e.target.style.marginBottom = '0px'
 }
-
 const edit_group = ({ e, group, boardsData: { setCurrentGroup, navigate } }) => {
     if (e.detail === 2) {
         setCurrentGroup(group)

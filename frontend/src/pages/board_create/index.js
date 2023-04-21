@@ -1,8 +1,7 @@
-import { Container, Input, Title, Main, Form, Button, Textarea } from '../../components'
+import { Container, Input, Title, Form, Button } from '../../components'
 import styles from './styles.module.css'
-import { useFormWithValidation } from '../../utils'
-import { AuthContext } from '../../contexts'
-import { Navigate, useNavigate } from 'react-router-dom'
+
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import api from '../../api'
 
@@ -13,7 +12,6 @@ const BoardCreate = ({ boardsData: {current_board, boards, setCurrentBoard }}) =
     current_board ? navigate(`/board/${current_board}/`) : navigate('/')
   }
   const board_create = (event, data) => {
-    // setCurrentBoard(null)
     api.createBoard({
       ...data
     }).then(res => {
@@ -29,11 +27,9 @@ const BoardCreate = ({ boardsData: {current_board, boards, setCurrentBoard }}) =
       })
     event.preventDefault();
   }
-
   const checkIfDisabled = () => {
     return taskTitle === ''
   }
-
   return <Container>
       <Title title='Создать Доску' />
       <Form
@@ -63,7 +59,6 @@ const BoardCreate = ({ boardsData: {current_board, boards, setCurrentBoard }}) =
         >
           Создать
         </Button>
-
         <Button
           modifier='style_dark-blue'
           className={styles.button}
@@ -72,7 +67,6 @@ const BoardCreate = ({ boardsData: {current_board, boards, setCurrentBoard }}) =
         >
           Отменить
         </Button>
-
       </Form>
     </Container>
 }

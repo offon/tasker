@@ -18,7 +18,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      `${this._url}/api/board/${id}/`,
+      `/api/board/${id}/`,
       {
         method: 'GET',
         headers: {
@@ -32,7 +32,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url + '/api/boards/',
+      '/api/boards/',
       {
         method: 'POST',
         headers: {
@@ -45,7 +45,7 @@ class Api {
 
   signin({ email, password }) {
     return fetch(
-      this._url + '/api/users/login/',
+      '/api/users/login/',
       {
         method: 'POST',
         headers: this._headers,
@@ -59,7 +59,7 @@ class Api {
   signout() {
     const token = localStorage.getItem('token')
     return fetch(
-      this._url + '/api/users/logout/',
+      '/api/users/logout/',
       {
         method: 'POST',
         headers: {
@@ -72,7 +72,7 @@ class Api {
 
   signup({ email, password, username, first_name, last_name }) {
     return fetch(
-      this._url + `/api/users/`,
+      `/api/users/`,
       {
         method: 'POST',
         headers: this._headers,
@@ -86,7 +86,7 @@ class Api {
   getUserData() {
     const token = localStorage.getItem('token')
     return fetch(
-      this._url + `/api/users/me/`,
+      `/api/users/me/`,
       {
         method: 'GET',
         headers: {
@@ -116,7 +116,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url + '/api/tasks/',
+      '/api/tasks/',
       {
         method: 'POST',
         headers: {
@@ -131,7 +131,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      `${this._url}/api/tasks/${task_id.id}/`,
+      `/api/tasks/${task_id.id}/`,
       {
         method: 'DELETE',
         headers: {
@@ -145,7 +145,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      `${this._url}/api/tasks/${id}/`,
+      `/api/tasks/${id}/`,
       {
         method: 'PATCH',
         headers: {
@@ -161,7 +161,7 @@ class Api {
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     let tasks = [...tasks_from, ...tasks_to]
     return fetch(
-      this._url + '/api/tasks/move/',
+      '/api/tasks/move/',
       {
         method: 'POST',
         headers: {
@@ -176,7 +176,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url + '/api/groups/move/',
+      '/api/groups/move/',
       {
         method: 'POST',
         headers: {
@@ -191,7 +191,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url + '/api/groups/',
+      '/api/groups/',
       {
         method: 'POST',
         headers: {
@@ -206,7 +206,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      `${this._url}/api/groups/${id}/`,
+      `/api/groups/${id}/`,
       {
         method: 'PATCH',
         headers: {
@@ -221,7 +221,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      `${this._url}/api/board/${id}/`,
+      `/api/board/${id}/`,
       {
         method: 'PATCH',
         headers: {
@@ -236,7 +236,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      this._url + '/api/boards/',
+      '/api/boards/',
       {
         method: 'GET',
         headers: {
@@ -250,7 +250,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      `${this._url}/api/groups/${group.id}/`,
+      `/api/groups/${group.id}/`,
       {
         method: 'DELETE',
         headers: {
@@ -263,7 +263,7 @@ class Api {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
     return fetch(
-      `${this._url}/api/boards/${id}/`,
+      `/api/boards/${id}/`,
       {
         method: 'DELETE',
         headers: {
@@ -275,4 +275,4 @@ class Api {
 
 }
 
-export default new Api('http://localhost:8000', { 'content-type': 'application/json' })
+export default new Api('http://localhost', { 'content-type': 'application/json' })

@@ -24,7 +24,6 @@ const getBoardsData = (setBoards) => {
         })
 }
 
-
 export { getBoardsData, getBoardData }
 
 
