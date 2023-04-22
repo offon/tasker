@@ -21,7 +21,6 @@ services:
     restart: always
     volumes:
       - static_value:/app/static/
-      - ./create_superuser.sh:/app/create_superuser.sh:ro
     depends_on:
       - db
     env_file:
