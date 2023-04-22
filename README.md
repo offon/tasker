@@ -1,8 +1,9 @@
 # Tasker
-![Python Version](https://img.shields.io/badge/python-3.9-blue) ![React Version](https://img.shields.io/badge/react-17.0.2-blue) ![Postgres Version](https://img.shields.io/badge/postgres-13.3-blue) 
-![Docker Version](https://img.shields.io/badge/docker-20.10.8-blue)
+![Python Version](https://img.shields.io/badge/python-3.9-blue) ![Django Version](https://img.shields.io/badge/django-4.1.3-blue) ![React Version](https://img.shields.io/badge/react-15.0.2-blue) ![Postgres Version](https://img.shields.io/badge/postgres-15.2-blue) ![Docker Version](https://img.shields.io/badge/docker-20.10.8-blue)
 
-Tasker - это учебное приложение, похожее по функционалу на Trello, выполненное на Django, React, Postgres и Docker Compose.
+Tasker - это учебное приложение, похожее по функционалу на доски KanBan, trello и т.п, выполненное на Django, React, Postgres и Docker Compose. Данное приложение создавалось для лучшего усвоения материала по Django, а так же знакомство с технлогиями Reac и java-scrips. Часть компонентов для фронтэнда было взято из приложения foodgram, процессы перетаскивания элементов реализовано с помощью хуков Drag and Drop компонентов.
+
+Это приложение имеет минимальный функционал, особеннов части фронэнда (не до конца реализована валидация данных, обработка ошибок и др.) по мере появления времени я его дорабатываю.
 
 ## Установка
 
@@ -58,7 +59,7 @@ exec gunicorn tasker.wsgi:application -b 0.0.0.0:8000
 
 Приложение состоит из четырех контейнеров Docker, каждый из которых выполняет свою функцию:
 
-1.  **web** - это контейнер, который содержит фреймворк Django и все необходимые зависимости для работы с ним.
+1.  **web** - это контейнер, который содержит backend часть приложжения, фреймворк Django и все необходимые зависимости для работы с ним.
     
 2.  **db** - это контейнер, который содержит базу данных PostgreSQL. Он используется для хранения данных приложения..
     
@@ -66,17 +67,6 @@ exec gunicorn tasker.wsgi:application -b 0.0.0.0:8000
     
 4.  **frontend** - это контейнер, который содержит фронтенд приложение, написанное с использованием React. Он компилируется при первом запуске, копирует необходимые данные для работы nginx.
 
-## URL-адреса
-
-URL-адреса для данного проекта Django включают следующие маршруты:
-
--   `/board/<id>/`: URL для получения, обновления и удаления определенной доски. Используется метод GET, PUT и DELETE. id - это идентификатор доски.
--   `/boards/`: URL для получения списка всех досок. Используется метод GET.
--   `/groups/`: URL для получения списка всех групп задач. Используется метод GET.
--   `/tasks/`: URL для получения списка всех задач. Используется метод GET.
--   `/users/`: URL для получения списка всех пользователей. Используется метод GET.
--   `/users/login/`: URL для получения токена авторизации пользователя. Используется метод POST.
--   `/users/logout/`: URL для удаления токена авторизации пользователя. Используется метод POST.
 
 ## Регистрация пользователя
 
@@ -92,7 +82,7 @@ URL-адреса для данного проекта Django включают с
     username: "name",
     first_name: "name",
     last_name: "name"
-    }
+}
 ```
 ### Пример ответа
 
@@ -101,9 +91,8 @@ URL-адреса для данного проекта Django включают с
     "username":"name",
     "email":"name@email.ru",
     "first_name":"",
-    "last_name":"",
-    "password":"pbkdf2_sha256$390000$JkBMN4TjIugIJhMph4kLSt$65Df992aPywrKVrpPKIb5FwSiCjrYM3BlU3X6WVWXGw="
-    }
+    "last_name":""
+}
 ```
 
 ### Коды ответа
@@ -122,14 +111,14 @@ URL-адреса для данного проекта Django включают с
 {
     email: "name@email.ru",
     password: "password"
-    }
+}
 ```
 ### Пример ответа
 
 ```
 {
     "auth_token":"e38a3c4e53804a94820e8f2d66fcc990f89045ee"
-    }
+}
 ```
 
 ### Коды ответа
@@ -148,7 +137,7 @@ URL-адреса для данного проекта Django включают с
 {
     current_password: "old_password",
     new_password: "new_password"
-    }
+}
 ```
 
 ### Коды ответа
@@ -183,7 +172,7 @@ URL-адреса для данного проекта Django включают с
     "email":"name@email.ru",
     "first_name":"",
     "last_name":"",
-    }
+}
 ```
 
 ### Коды ответа
