@@ -2,7 +2,9 @@ from django.shortcuts import get_object_or_404
 from djoser import utils
 from djoser.serializers import SetPasswordSerializer
 from rest_framework import decorators, status, viewsets
+
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from tasks.models import Board, Group, Task
@@ -13,7 +15,8 @@ from .serialisers import (BoardSerialiser, CreateUserSerialiser,
 from .utils import return_all_data
 
 
-class UsersSet(viewsets.ViewSet):
+class UsersSet(viewsets.GenericViewSet):
+
     def create(self, request):
         serialiser = CreateUserSerialiser(data=request.data)
         if serialiser.is_valid(raise_exception=True):
@@ -23,14 +26,15 @@ class UsersSet(viewsets.ViewSet):
 
     @action(detail=False, methods=['get'])
     def me(self, request):
+        if request.user.is_anonymous:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         serialiser = GetUserSerialiser(request.user)
         return Response(serialiser.data, status=status.HTTP_200_OK)
 
-    @action(
-        ["post", ],
-        detail=False,
-    )
+    @action(["post", ], detail=False)
     def set_password(self, request):
+        if request.user.is_anonymous:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
         serializer = SetPasswordSerializer(
             data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
@@ -40,7 +44,9 @@ class UsersSet(viewsets.ViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class BoardsViewSet(viewsets.ViewSet):
+class BoardsViewSet(viewsets.GenericViewSet):
+    permission_classes = [IsAuthenticated]
+
     def create(self, request):
         data = request.data
         if not data:
@@ -57,23 +63,22 @@ class BoardsViewSet(viewsets.ViewSet):
         return Response(serialiser.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
-        board = get_object_or_404(Board, pk=pk)
+        board = get_object_or_404(Board, pk=pk, author=request.user)
         status_delete, _ = board.delete()
         if status_delete:
             return Response({'board': pk}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class BoardViewSet(viewsets.ViewSet):
+class BoardViewSet(viewsets.GenericViewSet):
+    permission_classes = [IsAuthenticated]
 
     def list(self, request, pk=None):
-        if request.user.is_anonymous:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
         return return_all_data(pk)
 
     def patch(self, request, pk=None):
         title = request.data
-        board = get_object_or_404(Board, pk=pk)
+        board = get_object_or_404(Board, pk=pk, author=request.user)
         serialiser = BoardSerialiser(
             board, data={'title': title}, partial=True)
         if serialiser.is_valid(raise_exception=True):
@@ -81,8 +86,7 @@ class BoardViewSet(viewsets.ViewSet):
             return Response(serialiser.data, status=status.HTTP_200_OK)
 
 
-class TasksViewSet(viewsets.ViewSet):
-
+class TasksViewSet(viewsets.GenericViewSet):
     def create(self, request):
         task = request.data.get('task')
         if not task:
@@ -94,7 +98,7 @@ class TasksViewSet(viewsets.ViewSet):
         return Response(serialiser.error_messages, status=status.HTTP_200_OK)
 
     def destroy(self, request, pk=None):
-        task = get_object_or_404(Task, pk=pk)
+        task = get_object_or_404(Task, pk=pk, author=request.user)
         status_delete, _ = task.delete()
         if status_delete:
             return Response({'task': pk}, status=status.HTTP_200_OK)
@@ -102,7 +106,7 @@ class TasksViewSet(viewsets.ViewSet):
 
     def patch(self, request, pk=None):
         title = request.data
-        task = get_object_or_404(Task, pk=pk)
+        task = get_object_or_404(Task, pk=pk, author=request.user)
         serialiser = TaskSerialiser(task, data={'title': title}, partial=True)
         if serialiser.is_valid(raise_exception=True):
             serialiser.save()
@@ -114,7 +118,10 @@ class TasksViewSet(viewsets.ViewSet):
         if not tasks:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         id_of_tasks = [task.get('id') for task in tasks]
-        task_for_update = Task.objects.filter(id__in=id_of_tasks)
+        task_for_update = Task.objects.filter(
+            id__in=id_of_tasks, author=request.user)
+        if not task_for_update:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         serialiser = TaskListSerializer(
             instance=task_for_update,
             data=tasks,
@@ -126,7 +133,8 @@ class TasksViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class GroupsViewSet(viewsets.ViewSet):
+class GroupsViewSet(viewsets.GenericViewSet):
+    permission_classes = [IsAuthenticated]
 
     def create(self, request):
         data = request.data
@@ -139,14 +147,14 @@ class GroupsViewSet(viewsets.ViewSet):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, pk=None):
-        group = get_object_or_404(Group, pk=pk)
+        group = get_object_or_404(Group, pk=pk, author=request.user)
         status_delete, _ = group.delete()
         if status_delete:
             return Response({'group': pk}, status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request, pk=None):
-        group = get_object_or_404(Group, pk=pk)
+        group = get_object_or_404(Group, pk=pk, author=request.user)
         title = request.data
         serialiser = GroupSerialiser(
             group, data={'title': title}, partial=True)
@@ -161,7 +169,10 @@ class GroupsViewSet(viewsets.ViewSet):
         if not groups:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         id_of_groups = [group.get('id') for group in groups]
-        groups_for_update = Group.objects.filter(id__in=id_of_groups)
+        groups_for_update = Group.objects.filter(
+            id__in=id_of_groups, author=request.user)
+        if not groups_for_update:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         serialiser = GroupListSerialiser(
             instance=groups_for_update,
             data=groups,
